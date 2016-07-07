@@ -2,25 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
     <title>Cat Clicker</title>
   </head>
   <body>
-    <main>
-      <img id="cat-picture" src="images/cat.jpg" alt="cat picture">
-      <h1 id="click-counter"></h1>
+    <main class="container">
+      <div class="row">
+        <h1 id="cat-name1" class="col-6"></h1>
+        <h1 id="cat-name2" class="col-6"></h1>
+      </div>
+      <div class="row">
+        <div class="col-4">
+        <img id="cat-picture1" src="images/cat1.jpg" alt="cat picture">
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-4">
+        <img id="cat-picture2" src="images/cat2.jpg" alt="cat picture">
+        </div>
+      </div>
+      <div class="row">
+        <h2 id="click-counter1" class="col-6"></h2>
+        <h2 id="click-counter2" class="col-6"></h2>
+      </div>
     </main>
-    <script>
-      var cat = document.getElementById('cat-picture');
-      var counter = document.getElementById('click-counter');
-      var clicks = 0;
-      counter.textContent = clicks + ' clicks';
-
-      cat.addEventListener('click', function() {
-      console.log('clicked the cat');
-      clicks++;
-      counter.textContent = clicks + ' clicks';
-      }, false);
-    </script>
+    <script src="js/app.js"></script>
   </body>
 </html>
