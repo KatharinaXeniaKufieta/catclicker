@@ -7,6 +7,14 @@ body, main {
 img {
   border: 0;
   max-width: 100%;
+  padding: 10px;
+}
+
+p {
+  font-size: 30px;
+  padding: 40px;
+  margin: 0px;
+  color: #fe4365;
 }
 
 .container {
@@ -34,6 +42,14 @@ img {
   }
 }
 
+#cat-list {
+  background-color: #fc9d9a;
+}
+
+#cat-display {
+  background-color: #f9cdad;
+}
+
 .row {
   width: 100%;
   display: flex;
@@ -42,8 +58,7 @@ img {
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
   position: relative;
-  min-height: 1px;
-}
+  min-height: 1px;}
 
 .col-12 {
   width: 100%;
