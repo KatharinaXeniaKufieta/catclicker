@@ -6,12 +6,12 @@ body, main {
 
 img {
   border: 0;
-  max-width: 100%;
+  max-width: 90%;
   padding: 10px;
 }
 
 p {
-  font-size: 30px;
+  font-size: 1.5em;
   padding: 40px;
   margin: 0px;
   color: #fe4365;
@@ -48,6 +48,8 @@ p {
 
 #cat-display {
   background-color: #f9cdad;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .row {

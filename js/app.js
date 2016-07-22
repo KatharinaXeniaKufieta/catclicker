@@ -1,117 +1,128 @@
-// Cats Object
-var cats = {};
+var data = {
+  cats: [
+    {
+      id: 0,
+      name: "Miezekatze",
+      image: "http://placekitten.com/200/300",
+      clicks: 0
+    }, {
+      id: 1,
+      name: "Kietzematze",
+      image: "http://placekitten.com/300/300",
+      clicks: 0
+    }, {
+      id: 2,
+      name: "Sparrow",
+      image: "http://placekitten.com/300/200",
+      clicks: 0
+    }, {
+      id: 3,
+      name: "Ninja",
+      image: "http://placekitten.com/400/400",
+      clicks: 0
+    }, {
+      id: 4,
+      name: "Deadpool",
+      image: "http://placekitten.com/300/400",
+      clicks: 0
+    }, {
+      id: 5,
+      name: "Daredevil",
+      image: "http://placekitten.com/400/500",
+      clicks: 0
+    }, {
+      id: 6,
+      name: "Mauzen",
+      image: "http://placekitten.com/200/400",
+      clicks: 0
+    }
+  ]
+};
 
-cats.names = [
-  "Miezekatze",
-  "Kietzematze",
-  "Sparrow",
-  "Ninja",
-  "Deadpool",
-  "Daredevil",
-  "Mauzen"
-];
+var octopus = {
+  getCats: function() {
+    return data.cats;
+  },
 
-cats.images = [
-  "http://placekitten.com/200/300",
-  "http://placekitten.com/200/400",
-  "http://placekitten.com/300/300",
-  "http://placekitten.com/300/200",
-  "http://placekitten.com/400/400",
-  "http://placekitten.com/300/400",
-  "http://placekitten.com/400/500"
-];
+  getCat: function(catID) {
+    return data.cats[catID];
+  },
 
+  updateDisplay: function(catID) {
+    viewCatDisplay.render(this.getCat(catID));
+  },
 
-var createDOM = function() {
-  var catList = document.getElementById('cat-list');
-  var display = document.getElementById('cat-display');
-  var cat,
-      catName,
-      name,
-      image,
-      clicks;
-  for (var i = 0, max = cats.names.length; i < max; i++) {
-    // Make List
-    var cat = document.createElement('p');
-    catName = document.createTextNode(cats.names[i]);
-    cat.appendChild(catName);
-    catList.appendChild(cat);
-    // Create a new display per cat
-    var catDiv = document.createElement('div');
-    catDiv.style.visibility = 'hidden';
-    catDiv.style.position = 'absolute';
-    catDiv.style.top = '20px';
-    catDiv.className += 'row';
-    // Create a text node with the cats name
-    var nameDiv = document.createElement('p');
-    name = document.createTextNode(cats.names[i]);
-    name.className += 'col-12';
-    nameDiv.appendChild(name);
-    nameDiv.style.color = '#b93863';
-    // Create an image node with the cats image
-    var imageDiv = document.createElement('div');
-    image = document.createElement('img');
-    image.src = cats.images[i];
-    imageDiv.className += 'col-12';
-    imageDiv.appendChild(image);
-    // Create a next node showing the number of clicks
-    var clicksCounter = 0;
-    var clicksCounterDiv = document.createElement('p');
-    clicksCounterDiv.textContent = "Clicks: " + clicksCounter;
-    // clicks = document.createTextNode("Clicks: " + clicksCounter);
-    clicksCounterDiv.className += 'col-12';
-    clicksCounterDiv.style.color = '#b93863';
-    // clicksCounterDiv.appendChild(clicks);
+  updateClickCounter: function(catID) {
+    data.cats[catID].clicks++;
+    viewCatDisplay.renderClicks(this.getCat(catID));
+  },
+
+  init: function() {
+    // Get the cat data from the model
+    var cats = this.getCats();
+    // Set the current cat to the first cat in the list
+    // Initialize the cat list
+    viewCatList.init(cats);
+    // Initialize the display with the first cat in the list
+    viewCatDisplay.init(cats[0]);
+  }
+};
+
+var viewCatList = {
+  init: function(cats) {
+    // Grab the cat-list element from the DOM
+    var catList = document.getElementById('cat-list');
+    // Loop through all cats, create a text node and attach it to the
+    // cat-list. 
+    cats.forEach(function(cat) {
+      var listElement = document.createElement('p');
+      listElement.appendChild(document.createTextNode(cat.name));
+      catList.appendChild(listElement);
+      // Add a click event listener to each elemnt in the list.
+      listElement.addEventListener('click', (function(cat) {
+        return function() {
+          octopus.updateDisplay(cat.id);
+        }
+      })(cat));
+    });
+  }
+};
+
+var viewCatDisplay = {
+  init: function(cat) {
+    this.render(cat);
+  },
+
+  render: function(cat) {
+    var name = document.getElementById('cat-display-name');
+    var imgDiv = document.getElementById('cat-display-image');
+    var clicks = document.getElementById('cat-display-clicks');
+
+    // Clear image
+    imgDiv.innerHTML = '';
+
+    // Create an image
+    var catImage = new Image();
+    catImage.src = cat.image;
+
+    // Attach a click event listener to the image
+    catImage.addEventListener('click', (function(cat) {
+      return function() {
+        octopus.updateClickCounter(cat.id);
+      }
+    })(cat));
 
     // Append elements to DOM
-    catDiv.appendChild(nameDiv);
-    catDiv.appendChild(imageDiv);
-    catDiv.appendChild(clicksCounterDiv);
-    display.appendChild(catDiv);
+    name.textContent = cat.name;
+    imgDiv.appendChild(catImage);
+    clicks.textContent = 'Clicks: ' + cat.clicks;
 
-    // Hover event listener
-    cat.addEventListener('mouseover', (function(catDiv, cat) {
-      return function() {
-        catDiv.style.visibility = 'visible';
-        cat.style.fontWeight = 'bold';
-        cat.style.color = '#b93863';
-      }
-    })(catDiv, cat));
+  },
 
-    catDiv.addEventListener('mouseover', (function(catDiv, cat) {
-      return function() {
-        catDiv.style.visibility = 'visible';
-        cat.style.fontWeight = 'bold';
-        cat.style.color = '#b93863';
-      }
-    })(catDiv, cat));
-
-    catDiv.addEventListener('mouseout', (function(catDiv, cat) {
-      return function() {
-        catDiv.style.visibility = 'hidden';
-        cat.style.fontWeight = 'normal';
-        cat.style.color = '#fe4365';
-      }
-    })(catDiv, cat));
-
-    // Mouseout event listener
-    cat.addEventListener('mouseout', (function(catDiv, cat) {
-      return function() {
-        catDiv.style.visibility = 'hidden';
-        cat.style.fontWeight = 'normal';
-        cat.style.color = '#fe4365';
-      }
-    })(catDiv, cat));
-
-    // Click event listener
-    catDiv.addEventListener('click', (function(clicksCounter, clicksCounterDiv) {
-      return function() {
-        clicksCounter++;
-        clicksCounterDiv.textContent = "Clicks: " + clicksCounter;
-        console.log(clicksCounter);
-      }
-    })(clicksCounter, clicksCounterDiv));
+  renderClicks: function(cat) {
+    var clicks = document.getElementById('cat-display-clicks');
+    clicks.textContent = "Clicks: " + cat.clicks;
   }
-}
+};
 
-createDOM();
+octopus.init();
