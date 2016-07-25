@@ -79,6 +79,7 @@ var octopus = {
     model.cats[currentCatId].image = newURL;
     model.cats[currentCatId].clicks = newClicks;
     this.updateDisplay(currentCatId);
+    viewCatList.render(model.cats);
   },
 
   updateDisplay: function(catID) {
@@ -109,13 +110,19 @@ var octopus = {
 
 var viewCatList = {
   init: function(cats) {
+    this.render(cats);
+  },
+
+  render: function(cats) {
     // Grab the cat-list element from the DOM
     var catList = document.getElementById('cat-list');
     // Loop through all cats, create a text node and attach it to the
     // cat-list. 
+    catList.innerHTML = '';
     cats.forEach(function(cat) {
       var listElement = document.createElement('p');
       listElement.appendChild(document.createTextNode(cat.name));
+      listElement.id = 'cat-' + cat.id;
       catList.appendChild(listElement);
       // Add a click event listener to each elemnt in the list.
       listElement.addEventListener('click', (function(cat) {
@@ -125,6 +132,7 @@ var viewCatList = {
       })(cat));
     });
   }
+
 };
 
 var viewCatDisplay = {
