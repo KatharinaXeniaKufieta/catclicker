@@ -1,4 +1,6 @@
-var data = {
+/* ======= Model ======= */
+
+var model = {
   cats: [
     {
       id: 0,
@@ -36,24 +38,56 @@ var data = {
       image: "http://placekitten.com/200/400",
       clicks: 0
     }
-  ]
+  ],
+
+  adminAreaVisible: false,
+  currentCat: null
 };
+
+/* ======= Octopus ======= */
 
 var octopus = {
   getCats: function() {
-    return data.cats;
+    return model.cats;
   },
 
   getCat: function(catID) {
-    return data.cats[catID];
+    return model.cats[catID];
+  },
+
+  getCurrentCat: function() {
+    return model.cats[currentCat.catID];
+  },
+
+  getAdminAreaVisible: function() {
+    return model.adminAreaVisible;
+  },
+
+  toggleAdminAreaVisible: function() {
+    if (model.adminAreaVisible === false) {
+      model.adminAreaVisible = true;
+    } else {
+      model.adminAreaVisible = false;
+    }
+  },
+
+  updateCat: function(newName, newURL, newClicks) {
+    var currentCatId = model.currentCat.id;
+    console.log('currentCatId: ' + currentCatId);
+    // Update current cat
+    model.cats[currentCatId].name = newName;
+    model.cats[currentCatId].image = newURL;
+    model.cats[currentCatId].clicks = newClicks;
+    this.updateDisplay(currentCatId);
   },
 
   updateDisplay: function(catID) {
-    viewCatDisplay.render(this.getCat(catID));
+    model.currentCat = this.getCat(catID);
+    viewCatDisplay.render(model.currentCat);
   },
 
   updateClickCounter: function(catID) {
-    data.cats[catID].clicks++;
+    model.cats[catID].clicks++;
     viewCatDisplay.renderClicks(this.getCat(catID));
   },
 
@@ -61,12 +95,17 @@ var octopus = {
     // Get the cat data from the model
     var cats = this.getCats();
     // Set the current cat to the first cat in the list
+    model.currentCat = cats[0];
     // Initialize the cat list
     viewCatList.init(cats);
     // Initialize the display with the first cat in the list
-    viewCatDisplay.init(cats[0]);
+    viewCatDisplay.init(model.currentCat);
+    // Initialize the admin area, attaches event listeners to buttons
+    viewAdmin.init();
   }
 };
+
+/* ======= View ======= */
 
 var viewCatList = {
   init: function(cats) {
@@ -122,6 +161,52 @@ var viewCatDisplay = {
   renderClicks: function(cat) {
     var clicks = document.getElementById('cat-display-clicks');
     clicks.textContent = "Clicks: " + cat.clicks;
+  }
+};
+
+var viewAdmin = {
+
+  save: function() {
+    var newName = document.getElementById("cat-input-name").value;
+    var newURL = document.getElementById("cat-input-url").value;
+    var newClicks = document.getElementById("cat-input-clicks").value;
+    console.log('newName: ' + newName);
+    console.log('newURL: ' + newURL);
+    console.log('newClicks: ' + newClicks);
+    octopus.updateCat(newName, newURL, newClicks);
+    this.toggleAdminArea();
+  },
+
+  toggleAdminArea: function() {
+    var adminAreaVisible = octopus.getAdminAreaVisible();
+    if (adminAreaVisible === true) {
+      document.getElementById("admin-edit").style.visibility = 'hidden';
+      octopus.toggleAdminAreaVisible();
+    } else {
+      document.getElementById("admin-edit").style.visibility = 'visible';
+      octopus.toggleAdminAreaVisible();
+    }
+  },
+
+  // Attach event listeners to admin buttons
+  init: function() {
+    var admin = document.getElementById("admin");
+    var cancel = document.getElementById("cancel");
+    var save = document.getElementById("save");
+
+    // Show or hide the admin area when pressing the Admin button
+    admin.addEventListener('click', function() {
+      return viewAdmin.toggleAdminArea();
+    });
+
+    // Hide the admin area when pressing the Cancel button
+    cancel.addEventListener('click', function() {
+      return viewAdmin.toggleAdminArea();
+    });
+    // Validate and save the data when pressing the Save button
+    save.addEventListener('click', function() {
+      return viewAdmin.save();
+    });
   }
 };
 

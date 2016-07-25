@@ -8,13 +8,41 @@
   </head>
   <body>
     <main class="container">
+      <div class="row title">
+        <h1>Cat Clicker Premium Pro</h1>
+      </div>
       <div class="row">
-        <div id="cat-list" class="col-4"></div>
-        <div id="cat-display" class="col-8">
+        <div id="cat-list" class="col-5 shadow"></div>
+        <div id="cat-display" class="col-7">
           <div class="col-12"><p id="cat-display-name"></p></div>
           <div id="cat-display-image" class="col-12"></div>
           <div class="col-12"><p id="cat-display-clicks"></p></div>
         </div>
+      <div class="row admin-area">
+        <div class="col-3">
+          <button id="admin" name="admin">Admin</button>
+        </div>
+        <div id="admin-edit" class="col-9">
+          <table>
+            <tr>
+              <td>Name</td>
+              <td><input id="cat-input-name" type="text"></td>
+            </tr>
+            <tr>
+              <td>ImgURL</td>
+              <td><input id="cat-input-url" type="url"></td>
+            </tr>
+            <tr>
+              <td>#Clicks</td>
+              <td><input id="cat-input-clicks" type="text"></td>
+            </tr>
+            <tr>
+              <td><button id="cancel" name="cancel">Cancel</button></td>
+              <td><button id="save" name="save">Save</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
       </div>
     </main>
     <script src="js/app.js"></script>
